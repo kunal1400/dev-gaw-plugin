@@ -191,9 +191,20 @@ class Dev_Gaw_Public {
 
 			if ($product->get_type() === 'variable') {
 				$variations = $product->get_available_variations();
-				$product_with_variations['variations'] = $variations;
-			}
 
+				foreach ($variations as $variation) {
+					$variation_attributes = $variation['attributes'];
+					$variationAttributes = array();
+					foreach ($variation_attributes as $attribute_name => $attribute_value) {
+						$attribute_name = wc_attribute_label(str_replace('attribute_', '', $attribute_name));
+	
+						$variationAttributes[] = array('name'=>$attribute_name, 'option' => $attribute_value);
+					}
+					$variation['attributes'] = $variationAttributes;
+					$product_with_variations['variations'][] = $variation;
+				}
+			}
+	
 			$products_with_variations[] = $product_with_variations;
 		}
 
